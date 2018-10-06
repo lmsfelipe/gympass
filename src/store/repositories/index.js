@@ -1,5 +1,7 @@
+import { get } from 'lodash';
+
 import ServiceHelper from "../../services/service-helper";
-import { API_URL, TOKEN } from "../../services/configs";
+import { API_URL } from "../../services/configs";
 
 /**
  * Actions
@@ -23,15 +25,21 @@ export const fulfillRepos = data => ({
  * Thunks
  */
 
- export const getRepos = () => async dispatch => {
-   try {
-     dispatch(requestRepos());
-     const response = await ServiceHelper.SendGet(`${API_URL}/users/lmsfelipe/repos`, TOKEN);
-     dispatch(fulfillRepos(response));
-   } catch (error) {
-     dispatch(rejectRepos(error.response));
-   }
- }
+export const getRepos = () => async dispatch => {
+  try {
+    dispatch(requestRepos());
+    const response = await ServiceHelper.SendGet(`${API_URL}/users/lmsfelipe/repos`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
+    dispatch(fulfillRepos(response));
+  } catch (error) {
+    dispatch(rejectRepos(error.response));
+  }
+}
+
+/**
+ * Selectors
+ */
+
+export const selectRepositories = state => get(state, 'repositories.reposResponse.data');
 
 /**
  * Reducer
