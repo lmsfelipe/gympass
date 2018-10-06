@@ -9,22 +9,25 @@ class Repositories extends Component {
     this.props.getRepos();
   }
 
+  showCommitPage = (repoName) => {
+    console.log(repoName);
+  }
+
   renderRepos = () => {
     const { repos } = this.props;
 
     if (repos) {
       return repos.map(item => (
         <div key={item.id}>
-          <span>{item.name}</span>
+          <button onClick={() => this.showCommitPage(item.name)}>{item.name}</button>
         </div>
       ));
     }
 
-    return null;
+    return 'Carregando...';
   }
 
   render() {
-    console.log('Repos =>', this.props.repos);
     return (
       <Fragment>
         <h2>Repos</h2>
