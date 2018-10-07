@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { getRepos, selectRepositories } from '../../store/repositories';
+import { getCommits, selectCommits } from '../../store/commits';
 
 class Repositories extends Component {
   componentDidMount() {
@@ -10,7 +11,7 @@ class Repositories extends Component {
   }
 
   showCommitPage = (repoName) => {
-    console.log(repoName);
+    this.props.getCommits(repoName);
   }
 
   renderRepos = () => {
@@ -38,11 +39,13 @@ class Repositories extends Component {
 }
 
 const mapStateToProps = state => ({
-  repos: selectRepositories(state)
+  repos: selectRepositories(state),
+  commits: selectCommits(state),
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getRepos
+  getRepos,
+  getCommits
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Repositories);
