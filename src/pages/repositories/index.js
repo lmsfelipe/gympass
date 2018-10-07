@@ -8,11 +8,16 @@ import { getCommits } from '../../store/commits';
 import Commits from '../commits';
 
 class Repositories extends Component {
+  state = {
+    showCommitsComponent: false
+  }
+
   componentDidMount() {
     this.props.getRepos();
   }
 
   showCommitPage = (repoName) => {
+    this.setState({ showCommitsComponent: true })
     this.props.getCommits(repoName);
   }
 
@@ -32,6 +37,7 @@ class Repositories extends Component {
 
   render() {
     const { isLoading } = this.props;
+    const { showCommitsComponent } = this.state;
 
     if (isLoading) {
       return 'Carregando...'
@@ -41,7 +47,7 @@ class Repositories extends Component {
       <Fragment>
         <h2>Repos</h2>
         {this.renderRepos()}
-        <Commits />
+        {showCommitsComponent && <Commits />}
       </Fragment>
     );
   }
@@ -51,6 +57,7 @@ Repositories.propTypes = {
   getRepos: PropTypes.func.isRequired,
   getCommits: PropTypes.func.isRequired,
   repos: PropTypes.array,
+  isLoading: PropTypes.bool.isRequired
 }
 
 Repositories.defaultProps = {
