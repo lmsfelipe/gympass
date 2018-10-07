@@ -15,7 +15,8 @@ const doRequest = (url, method, payload, token) => {
     url,
     data: payload,
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.github.cloak-preview'
     },
   };
 
