@@ -3,69 +3,78 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { InfiniteScroll } from '../../components';
 import {
   selectCommits,
   selectLoading,
   searchCommits,
   getCommits,
-  selectRepoName
+  resetCommits,
+  selectRepoName,
+  selectPageNumber,
+  selectLoadMoreCommits
 } from '../../store/commits';
 
 class Commits extends Component {
   state = {
-    searchValue: ''
+    searchValue: '',
+    searchingMode: false
   }
 
   handleInputChange = (e) => {
     this.setState({ searchValue: e.target.value });
   }
 
-  searchCommits = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const { searchValue } = this.state;
+    const { searchCommits, resetCommits } = this.props;
+    this.setState({ searchingMode: true });
+
     if (!searchValue) {
-      return this.props.getCommits();
+      return null;
     }
-    return this.props.searchCommits(searchValue);
+
+    resetCommits();
+    return searchCommits({ searchValue, page: 1 });
   }
 
   cleanUp = () => {
-    this.setState({ searchValue: '' });
-    this.props.getCommits();
+    const { getCommits, resetCommits } = this.props;
+
+    this.setState({ searchValue: '', searchingMode: false });
+    resetCommits();
+    getCommits({ page: 1 });
   }
 
-  renderCommits = () => {
-    const { commits } = this.props;
+  handleLoadCommits = () => {
+    const { pageNumber, searchCommits, getCommits } = this.props;
+    const { searchingMode, searchValue } = this.state;
+    const page = pageNumber + 1;
 
-    // TODO CRIAR COMPNENTES REPETIDO ABAIXO
-    if (commits && Array.isArray(commits)) {
-      return commits.map(item => (
-        <div key={item.sha} style={{ margin: '20px 0' }}>
-          <div>{item.commit.author.name}</div>
-          <div>{item.commit.message}</div>
-        </div>
-      ));
-    } else if (commits.items.length !== 0) {
-      return commits.items.map(item => (
-        <div key={item.sha} style={{ margin: '20px 0' }}>
-          <div>{item.commit.author.name}</div>
-          <div>{item.commit.message}</div>
-        </div>
-      ));
+    if (searchingMode) {
+      return searchCommits({ searchValue, page });
     }
 
-    return 'No matches were found';
+    return getCommits({ page });
   }
 
+  renderCommits = (commits) => commits && commits.map(item => (
+    <div key={item.sha} style={{ margin: '20px 0' }}>
+      <div>{item.commit.author.name}</div>
+      <div>{item.commit.message}</div>
+    </div>
+  ));
+
   render() {
-    const { isLoading, selectedRepo } = this.props;
+    const { isLoading, selectedRepo, loadMoreCommits, commits } = this.props;
     const { searchValue } = this.state;
     
     return (
       <Fragment>
         <div style={{ margin: '10px 0' }}>
           <h3>Selected Repo: {selectedRepo}</h3>
-          <form onSubmit={this.searchCommits}>
+          <form onSubmit={this.handleSubmit}>
             <input
               name="commit-search"
               type="text"
@@ -77,15 +86,27 @@ class Commits extends Component {
             <button type="button" onClick={this.cleanUp}>Clear</button>
           </form>
         </div>
-        {isLoading ? 'Carregando...' : this.renderCommits()}
+        <InfiniteScroll
+          onReload={this.handleLoadCommits}
+          isLoading={isLoading}
+          loadMore={loadMoreCommits}
+        >
+          {this.renderCommits(commits)}
+        </InfiniteScroll>
       </Fragment>
     );
   }
 }
 
 Commits.propTypes = {
-  commits: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  isLoading: PropTypes.bool.isRequired
+  commits: PropTypes.PropTypes.array,
+  isLoading: PropTypes.bool.isRequired,
+  searchCommits: PropTypes.func.isRequired,
+  resetCommits: PropTypes.func.isRequired,
+  getCommits: PropTypes.func.isRequired,
+  pageNumber: PropTypes.number.isRequired,
+  selectedRepo: PropTypes.string.isRequired,
+  loadMoreCommits: PropTypes.bool.isRequired,
 }
 
 Commits.defaultProps = {
@@ -95,12 +116,15 @@ Commits.defaultProps = {
 const mapStateToProps = state => ({
   commits: selectCommits(state),
   isLoading: selectLoading(state),
-  selectedRepo: selectRepoName(state)
+  selectedRepo: selectRepoName(state),
+  pageNumber: selectPageNumber(state),
+  loadMoreCommits: selectLoadMoreCommits(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   searchCommits,
-  getCommits
+  getCommits,
+  resetCommits
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Commits);

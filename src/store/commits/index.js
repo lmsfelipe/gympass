@@ -12,6 +12,20 @@ export const selectedRepo = data => ({
   data
 });
 
+export const getPageNumber = data => ({
+  type: 'PAGE_NUMBER',
+  data
+});
+
+export const loadMoreCommits = bool => ({
+  type: 'LOAD_MORE_COMMITS',
+  bool
+});
+
+export const resetCommits = () => ({
+  type: 'RESET_COMMITS'
+});
+
 // Get commits
 export const requestCommits = () => ({
   type: 'REQUEST_COMMITS'
@@ -22,9 +36,9 @@ export const rejectCommits = data => ({
   data
 });
 
-export const fulfillCommits = data => ({
+export const fulfillCommits = payload => ({
   type: 'FULFILL_COMMITS',
-  data
+  payload
 });
 
 // Search commits
@@ -37,9 +51,9 @@ export const rejectSearchCommits = data => ({
   data
 });
 
-export const fulfillSearchCommits = data => ({
+export const fulfillSearchCommits = payload => ({
   type: 'FULFILL_SEARCH_COMMITS',
-  data
+  payload
 });
 
 /**
@@ -48,11 +62,20 @@ export const fulfillSearchCommits = data => ({
 
 // Get commits
 export const getCommits = data => async (dispatch, getState) => {
-  const repoName = data || getState().commits.selectedRepo;
+  const { page } = data;
+  const { selectedRepo } = getState().commits;
+
   try {
-    dispatch(selectedRepo(repoName));
+    dispatch(getPageNumber(page));
     dispatch(requestCommits());
-    const response = await ServiceHelper.SendGet(`${API_URL}/repos/reactjs/${repoName}/commits?page=1&per_page=20`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
+    const response = await ServiceHelper.SendGet(
+      `${API_URL}/repos/lmsfelipe/${selectedRepo}/commits?page=${page}&per_page=20`,
+      '02f34e544e7c09df672f71d339d680d53ebab7e7'
+    );
+    // For performance, it dispatches an action if there is no more content to load
+    if (response.data.length === 0) {
+      dispatch(loadMoreCommits(false));
+    }
     dispatch(fulfillCommits(response));
   } catch (error) {
     dispatch(rejectCommits(error.response));
@@ -60,11 +83,22 @@ export const getCommits = data => async (dispatch, getState) => {
 }
 
 // Search commits
-export const searchCommits = search => async (dispatch, getState) => {
+export const searchCommits = data => async (dispatch, getState) => {
   const { selectedRepo } = getState().commits;
+  const { searchValue, page } = data;
+
   try {
     dispatch(requestSearchCommits());
-    const response = await ServiceHelper.SendGet(`${API_URL}/search/commits?q=repo:reactjs/${selectedRepo}+${search}`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
+    dispatch(getPageNumber(page));
+    const response = await ServiceHelper.SendGet(
+      `${API_URL}/search/commits?q=repo:lmsfelipe/${selectedRepo}+${searchValue}&page=${page}&per_page=20`,
+      '02f34e544e7c09df672f71d339d680d53ebab7e7'
+    );
+
+    if (response.data.items.length === 0) {
+      dispatch(loadMoreCommits(false));
+    }
+    
     dispatch(fulfillSearchCommits(response));
   } catch (error) {
     dispatch(rejectSearchCommits(error.response));
@@ -75,8 +109,10 @@ export const searchCommits = search => async (dispatch, getState) => {
  * Selectors
  */
 
-export const selectCommits = state => get(state, 'commits.commitsResponse.data');
+export const selectCommits = state => get(state, 'commits.commitsResponse');
 export const selectRepoName = state => get(state, 'commits.selectedRepo');
+export const selectPageNumber = state => get(state, 'commits.pageNumber');
+export const selectLoadMoreCommits = state => get(state, 'commits.loadMoreCommits');
 export const selectLoading = state => get(state, 'commits.loading');
 
 /**
@@ -88,7 +124,9 @@ export const initialState = {
   error: false,
   errorMessage: null,
   selectedRepo: '',
-  commitsResponse: {}
+  pageNumber: 1,
+  loadMoreCommits: true,
+  commitsResponse: []
 };
 
 const CommitsReducer = (state = initialState, action) => {
@@ -98,6 +136,25 @@ const CommitsReducer = (state = initialState, action) => {
         ...state,
         selectedRepo: action.data
       };
+
+    case 'PAGE_NUMBER':
+      return {
+        ...state,
+        pageNumber: action.data
+      };
+
+    case 'LOAD_MORE_COMMITS':
+      return {
+        ...state,
+        loadMoreCommits: action.bool
+      }
+
+    case 'RESET_COMMITS':
+      return {
+        ...state,
+        commitsResponse: [],
+        loadMoreCommits: true
+      }
 
     // Get commits
     case 'REQUEST_COMMITS':
@@ -120,7 +177,10 @@ const CommitsReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: false,
-        commitsResponse: action.data
+        commitsResponse: [
+          ...state.commitsResponse,
+          ...action.payload.data
+        ]
       };
     
     // Search commits
@@ -144,7 +204,10 @@ const CommitsReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: false,
-        commitsResponse: action.data
+        commitsResponse: [
+          ...state.commitsResponse,
+          ...action.payload.data.items
+        ]
       };
 
     default:

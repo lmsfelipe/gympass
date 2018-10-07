@@ -17,9 +17,9 @@ export const rejectRepos = data => ({
   data
 });
 
-export const fulfillRepos = data => ({
+export const fulfillRepos = payload => ({
   type: 'FULFILL_REPOS',
-  data
+  payload
 });
 
 // Filter repos
@@ -32,9 +32,9 @@ export const rejectFilterRepos = data => ({
   data
 });
 
-export const fulfillFilterRepos = data => ({
+export const fulfillFilterRepos = payload => ({
   type: 'FULFILL_FILTER_REPOS',
-  data
+  payload
 });
 
 /**
@@ -45,7 +45,7 @@ export const fulfillFilterRepos = data => ({
 export const getRepos = () => async dispatch => {
   try {
     dispatch(requestRepos());
-    const response = await ServiceHelper.SendGet(`${API_URL}/users/reactjs/repos?type=owner`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
+    const response = await ServiceHelper.SendGet(`${API_URL}/users/lmsfelipe/repos?type=owner`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
     dispatch(fulfillRepos(response));
   } catch (error) {
     dispatch(rejectRepos(error.response));
@@ -56,7 +56,7 @@ export const getRepos = () => async dispatch => {
 export const getFilteredRepos = data => async dispatch => {
   try {
     dispatch(requestFilterRepos());
-    const response = await ServiceHelper.SendGet(`${API_URL}/search/repositories?q=user:reactjs&sort=${data}&order=desc`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
+    const response = await ServiceHelper.SendGet(`${API_URL}/search/repositories?q=user:lmsfelipe&sort=${data}&order=desc`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
     dispatch(fulfillFilterRepos(response));
   } catch (error) {
     dispatch(rejectFilterRepos(error.response));
@@ -67,7 +67,7 @@ export const getFilteredRepos = data => async dispatch => {
  * Selectors
  */
 
-export const selectRepositories = state => get(state, 'repositories.reposResponse.data');
+export const selectRepositories = state => get(state, 'repositories.reposResponse');
 export const selectLoading = state => get(state, 'repositories.loading');
 
 /**
@@ -78,7 +78,7 @@ export const initialState = {
   loading: false,
   error: false,
   errorMessage: null,
-  reposResponse: {}
+  reposResponse: []
 };
 
 const repositoriesReducer = (state = initialState, action) => {
@@ -104,7 +104,7 @@ const repositoriesReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: false,
-        reposResponse: action.data
+        reposResponse: action.payload.data
       };
 
     // Filter repos
@@ -128,7 +128,7 @@ const repositoriesReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: false,
-        reposResponse: action.data
+        reposResponse: action.payload.data.items
       };
 
     default:
