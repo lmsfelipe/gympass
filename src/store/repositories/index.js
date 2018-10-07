@@ -40,6 +40,7 @@ export const getRepos = () => async dispatch => {
  */
 
 export const selectRepositories = state => get(state, 'repositories.reposResponse.data');
+export const selectLoading = state => get(state, 'repositories.loading');
 
 /**
  * Reducer

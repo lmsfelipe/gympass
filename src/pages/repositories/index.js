@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { getRepos, selectRepositories } from '../../store/repositories';
-import { getCommits, selectCommits } from '../../store/commits';
+import { getRepos, selectRepositories, selectLoading } from '../../store/repositories';
+import { getCommits } from '../../store/commits';
+import Commits from '../commits';
 
 class Repositories extends Component {
   componentDidMount() {
@@ -25,22 +27,39 @@ class Repositories extends Component {
       ));
     }
 
-    return 'Carregando...';
+    return null;
   }
 
   render() {
+    const { isLoading } = this.props;
+
+    if (isLoading) {
+      return 'Carregando...'
+    }
+
     return (
       <Fragment>
         <h2>Repos</h2>
         {this.renderRepos()}
+        <Commits />
       </Fragment>
     );
   }
 }
 
+Repositories.propTypes = {
+  getRepos: PropTypes.func.isRequired,
+  getCommits: PropTypes.func.isRequired,
+  repos: PropTypes.array,
+}
+
+Repositories.defaultProps = {
+  repos: [],
+}
+
 const mapStateToProps = state => ({
   repos: selectRepositories(state),
-  commits: selectCommits(state),
+  isLoading: selectLoading(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

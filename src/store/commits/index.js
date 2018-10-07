@@ -40,6 +40,7 @@ export const getCommits = repoName => async dispatch => {
  */
 
 export const selectCommits = state => get(state, 'commits.commitsResponse.data');
+export const selectLoading = state => get(state, 'commits.loading');
 
 /**
  * Reducer
