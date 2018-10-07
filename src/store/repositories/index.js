@@ -45,7 +45,9 @@ export const fulfillFilterRepos = payload => ({
 export const getRepos = () => async dispatch => {
   try {
     dispatch(requestRepos());
-    const response = await ServiceHelper.SendGet(`${API_URL}/users/lmsfelipe/repos?type=owner`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
+    const response = await ServiceHelper.SendGet(
+      `${API_URL}/users/reactjs/repos?type=owner`
+    );
     dispatch(fulfillRepos(response));
   } catch (error) {
     dispatch(rejectRepos(error.response));
@@ -56,7 +58,9 @@ export const getRepos = () => async dispatch => {
 export const getFilteredRepos = data => async dispatch => {
   try {
     dispatch(requestFilterRepos());
-    const response = await ServiceHelper.SendGet(`${API_URL}/search/repositories?q=user:lmsfelipe&sort=${data}&order=desc`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
+    const response = await ServiceHelper.SendGet(
+      `${API_URL}/search/repositories?q=user:reactjs&sort=${data}&order=desc`
+    );
     dispatch(fulfillFilterRepos(response));
   } catch (error) {
     dispatch(rejectFilterRepos(error.response));

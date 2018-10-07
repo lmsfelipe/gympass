@@ -69,8 +69,7 @@ export const getCommits = data => async (dispatch, getState) => {
     dispatch(getPageNumber(page));
     dispatch(requestCommits());
     const response = await ServiceHelper.SendGet(
-      `${API_URL}/repos/lmsfelipe/${selectedRepo}/commits?page=${page}&per_page=20`,
-      '02f34e544e7c09df672f71d339d680d53ebab7e7'
+      `${API_URL}/repos/reactjs/${selectedRepo}/commits?page=${page}&per_page=20`
     );
     // For performance, it dispatches an action if there is no more content to load
     if (response.data.length === 0) {
@@ -91,14 +90,13 @@ export const searchCommits = data => async (dispatch, getState) => {
     dispatch(requestSearchCommits());
     dispatch(getPageNumber(page));
     const response = await ServiceHelper.SendGet(
-      `${API_URL}/search/commits?q=repo:lmsfelipe/${selectedRepo}+${searchValue}&page=${page}&per_page=20`,
-      '02f34e544e7c09df672f71d339d680d53ebab7e7'
+      `${API_URL}/search/commits?q=repo:reactjs/${selectedRepo}+${searchValue}&page=${page}&per_page=20`
     );
 
     if (response.data.items.length === 0) {
       dispatch(loadMoreCommits(false));
     }
-    
+
     dispatch(fulfillSearchCommits(response));
   } catch (error) {
     dispatch(rejectSearchCommits(error.response));
