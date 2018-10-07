@@ -37,6 +37,7 @@ class Commits extends Component {
   renderCommits = () => {
     const { commits } = this.props;
 
+    // TODO CRIAR COMPNENTES REPETIDO ABAIXO
     if (commits && Array.isArray(commits)) {
       return commits.map(item => (
         <div key={item.sha} style={{ margin: '20px 0' }}>

@@ -3,9 +3,14 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { getRepos, selectRepositories, selectLoading } from '../../store/repositories';
-import { getCommits } from '../../store/commits';
 import Commits from '../commits';
+import { getCommits } from '../../store/commits';
+import {
+  getRepos,
+  selectRepositories,
+  selectLoading,
+  getFilteredRepos
+} from '../../store/repositories';
 
 class Repositories extends Component {
   state = {
@@ -21,32 +26,51 @@ class Repositories extends Component {
     this.props.getCommits(repoName);
   }
 
+  sortRepos = (filterName) => {
+    this.props.getFilteredRepos(filterName);
+  }
+
+  renderFilters = () => {
+    const filterNames = ['stars', 'created', 'forks', 'size'];
+
+    return filterNames.map((filterName, id) => (
+      <div key={id}>
+        <button onClick={() => this.sortRepos(filterName)}>{filterName}</button>
+      </div>
+    ))
+  }
+
   renderRepos = () => {
     const { repos } = this.props;
 
-    if (repos) {
+    // TODO CRIAR COMPNENTES REPETIDO ABAIXO
+    if (repos && Array.isArray(repos)) {
       return repos.map(item => (
-        <div key={item.id}>
-          <button onClick={() => this.showCommitPage(item.name)}>{item.name}</button>
+        <div key={item.id} style={{ margin: '10px 0' }}>
+          <button onClick={() => this.showCommitPage(item.name)}>{item.name} *{item.stargazers_count}</button>
+        </div>
+      ));
+    } else if (repos.items.length !== 0) {
+      return repos.items.map(item => (
+        <div key={item.id} style={{ margin: '10px 0' }}>
+          <button onClick={() => this.showCommitPage(item.name)}>{item.name} *{item.stargazers_count}</button>
         </div>
       ));
     }
 
-    return null;
+    return 'No filters';
   }
 
   render() {
     const { isLoading } = this.props;
     const { showCommitsComponent } = this.state;
 
-    if (isLoading) {
-      return 'Carregando...'
-    }
-
     return (
       <Fragment>
         <h2>Repos</h2>
-        {this.renderRepos()}
+        {this.renderFilters()}
+        <hr />
+        {isLoading ? 'Carregando...' : this.renderRepos()}
         {showCommitsComponent && <Commits />}
       </Fragment>
     );
@@ -71,7 +95,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   getRepos,
-  getCommits
+  getCommits,
+  getFilteredRepos
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Repositories);

@@ -52,7 +52,7 @@ export const getCommits = data => async (dispatch, getState) => {
   try {
     dispatch(selectedRepo(repoName));
     dispatch(requestCommits());
-    const response = await ServiceHelper.SendGet(`${API_URL}/repos/lmsfelipe/${repoName}/commits?page=1&per_page=20`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
+    const response = await ServiceHelper.SendGet(`${API_URL}/repos/reactjs/${repoName}/commits?page=1&per_page=20`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
     dispatch(fulfillCommits(response));
   } catch (error) {
     dispatch(rejectCommits(error.response));
@@ -64,7 +64,7 @@ export const searchCommits = search => async (dispatch, getState) => {
   const { selectedRepo } = getState().commits;
   try {
     dispatch(requestSearchCommits());
-    const response = await ServiceHelper.SendGet(`${API_URL}/search/commits?q=repo:lmsfelipe/${selectedRepo}+${search}`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
+    const response = await ServiceHelper.SendGet(`${API_URL}/search/commits?q=repo:reactjs/${selectedRepo}+${search}`, '02f34e544e7c09df672f71d339d680d53ebab7e7');
     dispatch(fulfillSearchCommits(response));
   } catch (error) {
     dispatch(rejectSearchCommits(error.response));
