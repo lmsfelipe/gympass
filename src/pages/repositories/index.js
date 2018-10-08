@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Button } from '../../components';
+import { Button, RepoContent } from '../../components';
 import {
   getCommits,
   selectedRepo,
@@ -19,8 +19,7 @@ import {
   starSvg,
   forkSvg,
   FilterWrapper,
-  RepoWrapper,
-  RepoContent
+  RepoWrapper
 } from './styles';
 
 class Repositories extends Component {

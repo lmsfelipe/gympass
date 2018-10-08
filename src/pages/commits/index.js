@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { InfiniteScroll, Button } from '../../components';
+import { InfiniteScroll, Button, CommitsContent } from '../../components';
 import {
   selectCommits,
   selectLoading,
@@ -19,7 +19,6 @@ import {
   RepoTitle,
   SearchWrapper,
   CommitsWrapper,
-  CommitsContent,
   Input,
   ClearButton
 } from './styles';
@@ -28,10 +27,6 @@ class Commits extends Component {
   state = {
     searchValue: '',
     searchingMode: false
-  }
-
-  componentDidMount() {
-    this.props.getCommits({ page: 1 });
   }
 
   handleInputChange = (e) => {
@@ -96,10 +91,10 @@ class Commits extends Component {
     
     return (
       <Fragment>
-        <RepoTitle>Selected Repo: <strong>{selectedRepo || 'felipe'}</strong></RepoTitle>
+        <RepoTitle>Selected Repo: <strong>{selectedRepo || 'no repo selected'}</strong></RepoTitle>
         <form onSubmit={this.handleSubmit}>
           <SearchWrapper>
-            <Button onClick={() => history.push('/repositories')}>Back</Button>
+            <Button type="button" onClick={() => history.push('/repositories')}>Back</Button>
             <Input
               name="commit-search"
               type="text"
