@@ -18,7 +18,6 @@ import {
 import {
   starSvg,
   forkSvg,
-  FilterButton,
   FilterWrapper,
   RepoWrapper,
   RepoContent

@@ -8,7 +8,7 @@ const RepoTitle = styled.h3`
 `;
 
 const SearchWrapper = styled.div`
-  width: 450px;
+  width: 600px;
   margin: 0 auto;
 `;
 
@@ -68,7 +68,7 @@ const CommitsContent = styled.div`
 `;
 
 const Input = styled.input`
-  width: 80%;
+  width: 70%;
   padding: 15px 16px;
   margin-right: 15px;
   color: ${props => props.theme.primaryColor};

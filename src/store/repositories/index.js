@@ -12,9 +12,9 @@ export const requestRepos = () => ({
   type: 'REQUEST_REPOS'
 });
 
-export const rejectRepos = data => ({
+export const rejectRepos = payload => ({
   type: 'REJECT_REPOS',
-  data
+  payload
 });
 
 export const fulfillRepos = payload => ({
@@ -27,9 +27,9 @@ export const requestFilterRepos = () => ({
   type: 'REQUEST_FILTER_REPOS'
 });
 
-export const rejectFilterRepos = data => ({
+export const rejectFilterRepos = payload => ({
   type: 'REJECT_FILTER_REPOS',
-  data
+  payload
 });
 
 export const fulfillFilterRepos = payload => ({
@@ -100,7 +100,7 @@ const repositoriesReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
-        errorMessage: action.data
+        errorMessage: action.payload
       };
 
     case 'FULFILL_REPOS':
@@ -124,7 +124,7 @@ const repositoriesReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
-        errorMessage: action.data
+        errorMessage: action.payload
       };
 
     case 'FULFILL_FILTER_REPOS':

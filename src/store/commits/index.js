@@ -31,9 +31,9 @@ export const requestCommits = () => ({
   type: 'REQUEST_COMMITS'
 });
 
-export const rejectCommits = data => ({
+export const rejectCommits = payload => ({
   type: 'REJECT_COMMITS',
-  data
+  payload
 });
 
 export const fulfillCommits = payload => ({
@@ -46,9 +46,9 @@ export const requestSearchCommits = () => ({
   type: 'REQUEST_SEARCH_COMMITS'
 });
 
-export const rejectSearchCommits = data => ({
+export const rejectSearchCommits = payload => ({
   type: 'REJECT_SEARCH_COMMITS',
-  data
+  payload
 });
 
 export const fulfillSearchCommits = payload => ({
@@ -168,7 +168,7 @@ const CommitsReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
-        errorMessage: action.data
+        errorMessage: action.payload
       };
 
     case 'FULFILL_COMMITS':
@@ -195,7 +195,7 @@ const CommitsReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
-        errorMessage: action.data
+        errorMessage: action.payload
       };
 
     case 'FULFILL_SEARCH_COMMITS':
