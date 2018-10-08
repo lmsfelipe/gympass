@@ -6,7 +6,7 @@ const RepoContent = styled.div`
   margin: 10px;
   background: #fff;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: ${props => props.theme.borderRadius};
   border-top: 2px solid ${props => props.theme.primaryColor};
   box-shadow: ${props => props.theme.contentShadow};
   transition: ${props => props.theme.transition};

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Button, RepoContent } from '../../components';
+import { Button, RepoContent, RepoLoader } from '../../components';
 import {
   getCommits,
   selectedRepo,
@@ -81,7 +81,7 @@ class Repositories extends Component {
         </FilterWrapper>
         <hr />
         <RepoWrapper>
-          {isLoading ? 'Carregando...' : this.renderRepos(repos)}
+          {isLoading ? <RepoLoader /> : this.renderRepos(repos)}
         </RepoWrapper>
       </Fragment>
     );

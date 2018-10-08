@@ -6,3 +6,5 @@ export { default as Header } from './header';
 export { default as Button } from './button';
 export { default as RepoContent } from './repo-content';
 export { default as CommitsContent } from './commit-timeline';
+export { default as RepoLoader } from './repo-loader';
+export { default as CommitLoader } from './commit-loader';

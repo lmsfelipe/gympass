@@ -13,7 +13,7 @@ const SearchWrapper = styled.div`
 `;
 
 const CommitsWrapper = styled.div`
-  width: 600px;
+  width: 460px;
   margin: 40px auto;
   padding: 10px 0;
 `;

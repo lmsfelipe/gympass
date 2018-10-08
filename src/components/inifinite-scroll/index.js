@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
+import { CommitLoader } from '../../components';
+
 class InfiniteScroll extends Component {
   componentDidMount() {
     window.onscroll = this.handleReload;
@@ -23,7 +25,7 @@ class InfiniteScroll extends Component {
     return (
       <Fragment>
         {children}
-        {isLoading && '<==== LOADING COMMITS =====>'}
+        {isLoading && <CommitLoader />}
       </Fragment>
     );
   }

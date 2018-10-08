@@ -22,7 +22,7 @@ const CommitsContent = styled.div`
     top: 35px;
     left: -7px;
     border-radius: 50%;
-    border: 1px solid #c75071;
+    border: 1px solid ${props => props.theme.primaryColor};
     background: #f5f5f5;
   }
 
