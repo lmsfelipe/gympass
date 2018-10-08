@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { Button } from '../../components';
 import {
   getCommits,
   selectedRepo,
@@ -51,7 +52,7 @@ class Repositories extends Component {
     const filterNames = ['stars', 'created', 'forks', 'size'];
 
     return filterNames.map((filterName, id) => (
-      <FilterButton key={id} className={selectedFilter === filterName ? 'selected' : ''} onClick={() => this.sortRepos(filterName)}>{filterName}</FilterButton>
+      <Button key={id} className={selectedFilter === filterName ? 'selected' : ''} onClick={() => this.sortRepos(filterName)}>{filterName}</Button>
     ))
   }
 

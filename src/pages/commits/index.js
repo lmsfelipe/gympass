@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { InfiniteScroll } from '../../components';
+import { InfiniteScroll, Button } from '../../components';
 import {
   selectCommits,
   selectLoading,
@@ -12,7 +12,8 @@ import {
   resetCommits,
   selectRepoName,
   selectPageNumber,
-  selectLoadMoreCommits
+  selectLoadMoreCommits,
+  selectError
 } from '../../store/commits';
 import {
   RepoTitle,
@@ -81,26 +82,34 @@ class Commits extends Component {
   ));
 
   render() {
-    const { isLoading, selectedRepo, loadMoreCommits, commits } = this.props;
+    const { isLoading, selectedRepo, loadMoreCommits, commits, error, history } = this.props;
     const { searchValue } = this.state;
+
+    if (error) {
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <RepoTitle>No repo selected</RepoTitle>
+          <Button onClick={() => history.push('/repositories')}>Select repo</Button>
+        </div>
+      );
+    }
     
     return (
       <Fragment>
-        <div style={{ margin: '10px 0' }}>
-          <RepoTitle>Selected Repo: <strong>{selectedRepo || 'felipe'}</strong></RepoTitle>
-          <form onSubmit={this.handleSubmit}>
-            <SearchWrapper>
-              <Input
-                name="commit-search"
-                type="text"
-                placeholder="Search commits"
-                value={searchValue}
-                onChange={this.handleInputChange}
-              />
-              <ClearButton type="button" onClick={this.cleanUp}>X</ClearButton>
-            </SearchWrapper>
-          </form>
-        </div>
+        <RepoTitle>Selected Repo: <strong>{selectedRepo || 'felipe'}</strong></RepoTitle>
+        <form onSubmit={this.handleSubmit}>
+          <SearchWrapper>
+            <Button onClick={() => history.push('/repositories')}>Back</Button>
+            <Input
+              name="commit-search"
+              type="text"
+              placeholder="Search commits"
+              value={searchValue}
+              onChange={this.handleInputChange}
+            />
+            <ClearButton type="button" onClick={this.cleanUp}>X</ClearButton>
+          </SearchWrapper>
+        </form>
         <InfiniteScroll
           onReload={this.handleLoadCommits}
           isLoading={isLoading}
@@ -124,6 +133,8 @@ Commits.propTypes = {
   pageNumber: PropTypes.number.isRequired,
   selectedRepo: PropTypes.string.isRequired,
   loadMoreCommits: PropTypes.bool.isRequired,
+  error: PropTypes.bool.isRequired,
+  history: PropTypes.object.isRequired
 }
 
 Commits.defaultProps = {
@@ -135,7 +146,8 @@ const mapStateToProps = state => ({
   isLoading: selectLoading(state),
   selectedRepo: selectRepoName(state),
   pageNumber: selectPageNumber(state),
-  loadMoreCommits: selectLoadMoreCommits(state)
+  loadMoreCommits: selectLoadMoreCommits(state),
+  error: selectError(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

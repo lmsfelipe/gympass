@@ -112,6 +112,7 @@ export const selectRepoName = state => get(state, 'commits.selectedRepo');
 export const selectPageNumber = state => get(state, 'commits.pageNumber');
 export const selectLoadMoreCommits = state => get(state, 'commits.loadMoreCommits');
 export const selectLoading = state => get(state, 'commits.loading');
+export const selectError = state => get(state, 'commits.error');
 
 /**
  * Reducer
