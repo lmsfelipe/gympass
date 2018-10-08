@@ -9,7 +9,7 @@ const CommitsContent = styled.div`
     height: 100%;
     width: 1px;
     position: absolute;
-    top: 35px;
+    top: 33px;
     right: 100%;
     background: #c3c3c3;
   }
@@ -19,7 +19,7 @@ const CommitsContent = styled.div`
     height: 11px;
     width: 11px;
     position: absolute;
-    top: 35px;
+    top: 33px;
     left: -7px;
     border-radius: 50%;
     border: 1px solid ${props => props.theme.primaryColor};
@@ -46,6 +46,18 @@ const CommitsContent = styled.div`
     font-size: 1em;
     color: ${props => props.theme.textColor};
     margin-top: 3px;
+  }
+
+  & .commit-author-avatar {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border-radius: 50%;
+
+    & img {
+      width: 100%;
+    }
   }
 `;
 
