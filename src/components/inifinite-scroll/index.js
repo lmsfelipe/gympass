@@ -13,7 +13,6 @@ class InfiniteScroll extends Component {
 
     if (isLoading) return null;
 
-    // TODO: Criar variavel document...
     if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight && loadMore) {
       onReload();
     }
