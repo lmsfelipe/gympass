@@ -69,6 +69,9 @@ class Commits extends Component {
 
   renderCommits = (commits) => commits && commits.map(item => (
     <CommitsContent key={item.sha}>
+      <div className="commit-author-avatar">
+        <img src={item.author.avatar_url} alt="avatar" />
+      </div>
       <div className="commit-text">{item.commit.message}</div>
       <div>
         <div className="commit-author">{item.commit.author.name} | {item.commit.committer.date.substring(0, 10)}</div>
