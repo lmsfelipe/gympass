@@ -14,11 +14,23 @@ import {
   selectPageNumber,
   selectLoadMoreCommits
 } from '../../store/commits';
+import {
+  RepoTitle,
+  SearchWrapper,
+  CommitsWrapper,
+  CommitsContent,
+  Input,
+  ClearButton
+} from './styles';
 
 class Commits extends Component {
   state = {
     searchValue: '',
     searchingMode: false
+  }
+
+  componentDidMount() {
+    this.props.getCommits({ page: 1 });
   }
 
   handleInputChange = (e) => {
@@ -60,10 +72,12 @@ class Commits extends Component {
   }
 
   renderCommits = (commits) => commits && commits.map(item => (
-    <div key={item.sha} style={{ margin: '20px 0' }}>
-      <div>{item.commit.author.name}</div>
-      <div>{item.commit.message}</div>
-    </div>
+    <CommitsContent key={item.sha}>
+      <div className="commit-text">{item.commit.message}</div>
+      <div>
+        <div className="commit-author">{item.commit.author.name} | {item.commit.committer.date.substring(0, 10)}</div>
+      </div>
+    </CommitsContent>
   ));
 
   render() {
@@ -73,17 +87,18 @@ class Commits extends Component {
     return (
       <Fragment>
         <div style={{ margin: '10px 0' }}>
-          <h3>Selected Repo: {selectedRepo}</h3>
+          <RepoTitle>Selected Repo: <strong>{selectedRepo || 'felipe'}</strong></RepoTitle>
           <form onSubmit={this.handleSubmit}>
-            <input
-              name="commit-search"
-              type="text"
-              placeholder="Search commit"
-              value={searchValue}
-              onChange={this.handleInputChange}
-            />
-            <button type="submit">Search</button>
-            <button type="button" onClick={this.cleanUp}>Clear</button>
+            <SearchWrapper>
+              <Input
+                name="commit-search"
+                type="text"
+                placeholder="Search commits"
+                value={searchValue}
+                onChange={this.handleInputChange}
+              />
+              <ClearButton type="button" onClick={this.cleanUp}>X</ClearButton>
+            </SearchWrapper>
           </form>
         </div>
         <InfiniteScroll
@@ -91,7 +106,9 @@ class Commits extends Component {
           isLoading={isLoading}
           loadMore={loadMoreCommits}
         >
-          {this.renderCommits(commits)}
+          <CommitsWrapper>
+            {this.renderCommits(commits)}
+          </CommitsWrapper>
         </InfiniteScroll>
       </Fragment>
     );

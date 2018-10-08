@@ -26,32 +26,13 @@ const theme = {
   * Global CSS
   */
 injectGlobal`
-  html {
-    height: 100%;
-  }
-
   body {
-    height: 100%;
     font-family: 'Roboto', sans-serif;;
     font-size: 14px;
     background: #f5f5f5;
     color: #444;
     margin: 0;
     padding-bottom: 100px;
-  }
-
-  a {
-    color: #4bad94;
-    font-size: 1.1em;
-  }
-
-  p {
-    font-size: 1.2em;
-    line-height: 1.7em;
-  }
-
-  h1, h2, h3 {
-    font-weight: 600;
   }
 
   hr {
