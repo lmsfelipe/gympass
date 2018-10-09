@@ -10,10 +10,13 @@ class InfiniteScroll extends Component {
 
   handleReload = () => {
     const { onReload, isLoading, loadMore } = this.props;
+    const documentElement = document.documentElement;
+    const scrollElementPosition = window.innerHeight + documentElement.scrollTop;
+    const scrollBodyPosition = window.innerHeight + document.body.scrollTop;
 
     if (isLoading) return null;
-
-    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight && loadMore) {
+    
+    if ((scrollElementPosition === documentElement.offsetHeight || scrollBodyPosition === documentElement.offsetHeight) && loadMore) {
       onReload();
     }
   }
