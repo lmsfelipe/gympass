@@ -50,5 +50,3 @@ There are a few things that could be great to have the project. It would be grea
 is properly tested. Therefore, it gives to the developer a secure that his code is going to prod without breaking anything.
 
 Server side rendering also would be great to have, as it is good for SEO and performance, for example.
-
-PS. Just checked that some older chrome versions is getting issues with the infinite scroll. I'm already fixing it.
