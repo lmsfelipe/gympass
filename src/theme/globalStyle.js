@@ -10,8 +10,8 @@ const theme = {
   textColor: '#5f5f5f',
   borderRadius: '2px',
   transition: 'all 0.2s',
-  contentShadow: '3px 3px 6px #00000026',
-  contentShadowHover: '1px 1px 3px #0000003d'
+  contentShadow: '1px 1px 1px #00000026;',
+  contentShadowHover: '3px 3px 10px #0000002b'
 };
 
 /**
