@@ -1,5 +1,3 @@
-import { get } from 'lodash';
-
 import ServiceHelper from "../../services/service-helper";
 import { API_URL } from "../../services/configs";
 
@@ -107,12 +105,12 @@ export const searchCommits = data => async (dispatch, getState) => {
  * Selectors
  */
 
-export const selectCommits = state => get(state, 'commits.commitsResponse');
-export const selectRepoName = state => get(state, 'commits.selectedRepo');
-export const selectPageNumber = state => get(state, 'commits.pageNumber');
-export const selectLoadMoreCommits = state => get(state, 'commits.loadMoreCommits');
-export const selectLoading = state => get(state, 'commits.loading');
-export const selectError = state => get(state, 'commits.error');
+export const selectCommits = state => state.commits.commitsResponse;
+export const selectRepoName = state => state.commits.selectedRepo;
+export const selectPageNumber = state => state.commits.pageNumber;
+export const selectLoadMoreCommits = state => state.commits.loadMoreCommits;
+export const selectLoading = state => state.commits.loading;
+export const selectError = state => state.commits.error;
 
 /**
  * Reducer

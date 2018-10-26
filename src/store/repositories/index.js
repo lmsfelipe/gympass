@@ -1,5 +1,3 @@
-import { get } from 'lodash';
-
 import ServiceHelper from "../../services/service-helper";
 import { API_URL } from "../../services/configs";
 
@@ -71,8 +69,8 @@ export const getFilteredRepos = data => async dispatch => {
  * Selectors
  */
 
-export const selectRepositories = state => get(state, 'repositories.reposResponse');
-export const selectLoading = state => get(state, 'repositories.loading');
+export const selectRepositories = state => state.repositories.reposResponse;
+export const selectLoading = state => state.repositories.loading;
 
 /**
  * Reducer
